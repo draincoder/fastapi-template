@@ -1,0 +1,16 @@
+version: 1
+formatters:
+  colored:
+    (): colorlog.ColoredFormatter
+    format: "{log_color}[{asctime}] - {levelname} - [{module}:{lineno}:{funcName}] - {white}{message}"
+    style: "{"
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: colored
+    stream: ext://sys.stdout
+root:
+  level: INFO
+  handlers: [console]
+disable_existing_loggers: false

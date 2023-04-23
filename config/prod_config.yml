@@ -1,0 +1,15 @@
+db:
+  type: postgresql
+  connector: asyncpg
+  host: template.postgres
+  port: 5432
+  login: postgres
+  password: postgres
+  name: fastapi_template
+api:
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+auth:
+  secret-key: 3f219f0c414d60582932e9d85a6c03b7ef56555c01c82b6800d1201076d11d8b
+  token-expire-minutes: 30

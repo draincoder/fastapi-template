@@ -1,0 +1,15 @@
+db:
+  type: postgresql
+  connector: asyncpg
+  host: localhost
+  port: 5432
+  login: postgres
+  password: postgres
+  name: postgres
+api:
+  host: "127.0.0.1"
+  port: 8000
+  debug: false
+auth:
+  secret-key: 3f219f0c414d60582932e9d85a6c03b7ef56555c01c82b6800d1201076d11d8b
+  token-expire-minutes: 30

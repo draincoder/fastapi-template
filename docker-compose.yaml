@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  api:
+    profiles: [ "api" ]
+    container_name: template.api
+    build:
+      context: .
+    restart: unless-stopped
+    expose:
+      - "8000"
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - template.postgres.network
+    volumes:
+      - ./config:/app/config:ro
+    environment:
+      - CONFIG_FILE=${CONFIG_FILE:-prod_config.yml}
+    command: ["python", "-m", "app.api"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:8000/healtcheck"]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
+
+  postgres_migration:
+    profiles: [ "migration" ]
+    container_name: template.postgres_migration
+    build:
+      context: .
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - template.postgres.network
+    volumes:
+      - ./config:/app/config:ro
+      - ./alembic.ini:/app/alembic.ini:ro
+      - ./app/infrastructure/db/migrations:/app/app/infrastructure/db/migrations:ro
+    environment:
+      - CONFIG_FILE=${CONFIG_FILE:-prod_config.yml}
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+
+  postgres:
+    profiles: [ "api", "migration" ]
+    container_name: template.postgres
+    image: "postgres:15-alpine"
+    hostname: kestat.postgres
+    restart: unless-stopped
+    expose:
+      - "5432"
+    ports:
+      - "127.0.0.1:15432:5432"
+    networks:
+      - template.postgres.network
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_USER: ${POSTGRES_USER:-$USER}
+      POSTGRES_DB: ${POSTGRES_DB:-$USER}
+    volumes:
+      - template.postgres.data:/var/lib/postgresql/users:rw
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  template.postgres.data: {}
+
+networks:
+  template.postgres.network: {}
