@@ -28,8 +28,13 @@ def init_api(debug: bool, pool: async_sessionmaker, auth_config: AuthConfig) -> 
     return app
 
 
-async def run_api(app: FastAPI, api_config: ApiConfig) -> None:
-    config = uvicorn.Config(app, host=api_config.host, port=api_config.port, log_level=logging.INFO, log_config=None)
+async def run_api(app: FastAPI, api_config: ApiConfig, log_config: str) -> None:
+    config = uvicorn.Config(
+        app, host=api_config.host,
+        port=api_config.port,
+        log_level=logging.INFO,
+        log_config=log_config
+    )
     server = uvicorn.Server(config)
     logger.info("Running API")
     await server.serve()

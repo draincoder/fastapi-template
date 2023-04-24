@@ -1,16 +1,45 @@
 version: 1
+disable_existing_loggers: false
 formatters:
+  default:
+    (): 'uvicorn.logging.DefaultFormatter'
+    fmt: '{asctime} {levelname} [{module}:{lineno}:{funcName}] - {message}'
+    style: "{"
   colored:
     (): colorlog.ColoredFormatter
-    format: "{log_color}[{asctime}] - {levelname} - [{module}:{lineno}:{funcName}] - {white}{message}"
+    format: "{log_color}{asctime} {levelname} [{module}:{lineno}:{funcName}] - {white}{message}"
+    style: "{"
+  access:
+    (): "uvicorn.logging.AccessFormatter"
+    fmt: "{asctime} {levelname} [{name}] [{filename}:{lineno}] [trace_id={otelTraceID} span_id={otelSpanID} resource.service.name={otelServiceName}] - {message}"
     style: "{"
 handlers:
+  default:
+    class: logging.StreamHandler
+    formatter: default
+    stream: ext://sys.stderr
   console:
     class: logging.StreamHandler
     level: INFO
     formatter: colored
     stream: ext://sys.stdout
+  access:
+    class: logging.StreamHandler
+    formatter: access
+    stream: ext://sys.stdout
+loggers:
+  uvicorn:
+    level: INFO
+    handlers:
+      - default
+    propagate: False
+  uvicorn.error:
+    level: INFO
+  uvicorn.access:
+    level: INFO
+    propagate: False
+    handlers:
+      - access
 root:
   level: INFO
   handlers: [console]
-disable_existing_loggers: false

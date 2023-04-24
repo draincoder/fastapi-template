@@ -32,11 +32,11 @@ migrate: ## Migrate to new revision
 
 .PHONY: up
 up:  ## Run app in docker container
-	docker compose --profile api up --build -d
+	docker compose --profile api --profile grafana up --build -d
 
 .PHONY: down
 down:  ## Stop docker containers
-	docker compose --profile api down
+	docker compose --profile api --profile grafana down
 
 .PHONY: build
 build:  ## Build docker image

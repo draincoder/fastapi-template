@@ -21,7 +21,7 @@ async def main() -> None:
     app = init_api(config.api.debug, pool, config.auth)
     logger.info("Started")
     try:
-        await run_api(app, config.api)
+        await run_api(app, config.api, str(paths.logging_config_file))
     finally:
         close_all_sessions()
         await engine.dispose()

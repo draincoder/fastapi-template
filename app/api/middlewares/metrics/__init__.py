@@ -4,8 +4,9 @@ from .middleware import PrometheusMiddleware
 from .utils import setting_telemetry, metrics
 
 
+# TODO: Create config for Tempo
 APP_NAME = "api"
-GRPC_ENDPOINT = "http://tempo:4317"
+GRPC_ENDPOINT = "http://auth_template.tempo:4317"
 
 
 def add_metrics_middleware(app: FastAPI):

@@ -5,9 +5,8 @@ A small FastAPI template with OAuth authorization without using third-party auth
 ![List of endpoints](swagger.png)
 
 ### Quick start
-+ `make build`
-+ `make up`
 + `make migrate_docker`
++ `make up`
 
 
 ### Python libs stack
@@ -20,17 +19,20 @@ A small FastAPI template with OAuth authorization without using third-party auth
 + [Postgres](https://www.postgresql.org/docs/current/index.html) — Database
 + [Docker](https://docs.docker.com/) — For deployment
 
-### Monitoring stack*
+### Monitoring stack
 + [Grafana](https://grafana.com/docs/grafana/latest/) — Web view for logs
 + [Loki](https://grafana.com/docs/loki/latest/) — A platform to store and query logs
-+ [Vector.dev](https://vector.dev) — A tool to collect logs and send them to Loki
++ [Tempo](https://grafana.com/docs/tempo/latest/) — A high-volume distributed tracing backend
++ [Vector.dev*](https://vector.dev) — A tool to collect logs and send them to Loki
 + [Prometheus](https://prometheus.io/) - Monitoring system and time series database\
 `* - in development`
+
+![FastAPI Metrics](grafana.png)
 
 ### Check list
 - [x] Create template
 - [x] Configure Docker
-- [ ] Configure monitoring
+- [x] Configure monitoring
 - [ ] Add auto-tests
 
 

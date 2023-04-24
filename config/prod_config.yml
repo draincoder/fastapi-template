@@ -1,11 +1,11 @@
 db:
   type: postgresql
   connector: asyncpg
-  host: template.postgres
+  host: auth_template.postgres
   port: 5432
   login: postgres
   password: postgres
-  name: fastapi_template
+  name: auth_template
 api:
   host: "0.0.0.0"
   port: 8000
